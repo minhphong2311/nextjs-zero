@@ -6,7 +6,7 @@ const admin = () => {
         <div>
             <Button variant="primary">Test</Button>
             <Link href="/">Home</Link>
-            </div>
+        </div>
     )
 }
 export default admin;
