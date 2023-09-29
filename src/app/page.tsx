@@ -1,24 +1,33 @@
 'use client'
-import Image from 'next/image'
-import Link from 'next/link'
+// import Image from 'next/image'
+// import Link from 'next/link'
 import '@/styles/app.module.css'
 import AppTable from '@/components/app.table';
-import { useEffect } from 'react';
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Home() {
 
-  useEffect(() =>{
-    const fetchData = async () => {
-      const res = await fetch("http://localhost:8000/blogs");
-      const data = await res.json();
-      console.log(data);
+  const { data, error, isLoading } = useSWR(
+    "http://localhost:8000/blogs",
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
     }
-    fetchData();
-  }, [])
+  );
+  
+  if(!data){
+    return <div>loading...</div>
+  }
+
 
   return (
     <div>
-      <AppTable />
+      <div>{data?.lent}</div>
+      <AppTable blogs={data} />
     </div>
   )
 }
